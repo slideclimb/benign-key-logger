@@ -15,7 +15,7 @@
 #   held down
 
 import logging
-from pynput.keyboard import Key, Listener
+from pynput.keyboard import Key, KeyCode, Listener
 
 
 # ######### #### ######## ##########
@@ -33,8 +33,8 @@ SQLITE_FILE_NAME = 'key_log.sqlite'
 # ######### ####### ##### ##########
 
 logging.basicConfig(
-    # level=logging.DEBUG,
-    level=logging.INFO,
+    level=logging.DEBUG,
+    # level=logging.INFO,
     format='%(asctime)s.%(msecs)03d : %(levelname)-5s : %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
@@ -73,6 +73,10 @@ MODIFIER_KEYS = [
 IGNORED_KEYS = []
 
 REMAP = {
+    # Left alt on linux
+    KeyCode(65511): Key.alt,
+    # Right alt on linux
+    KeyCode(65512): Key.alt,
     Key.alt_r: Key.alt,
     Key.alt_l: Key.alt,
     Key.ctrl_r: Key.ctrl,
@@ -260,11 +264,13 @@ def log(key):
   conceptually, to miss the mark on logging combos).
   """
   modifiers_down = [k for k in keys_currently_down if k in MODIFIER_KEYS]
+  # If the key pressed is not a modifier and the only current modifier is shift...
   if list(set([
       Key.shift if k in [Key.shift, Key.shift_l, Key.shift_r] else k
       for k in modifiers_down
   ])) == [Key.shift] and key_is_a_symbol(key):
     modifiers_down = []
+
   log_entry = ' + '.join(
       sorted([key_to_str(k) for k in modifiers_down])
       + [key_to_str(key)]
