@@ -8,3 +8,6 @@
 
 # Python cache files
 *.pyc
+
+*.iml
+.idea
