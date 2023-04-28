@@ -56,6 +56,8 @@ if SEND_LOGS_TO_FILE:
 LOCKED_IN_GARBAGE_COLLECTION_LIMIT = 5
 
 MODIFIER_KEYS = [
+    KeyCode(65511),
+    KeyCode(65512),
     Key.alt,
     Key.alt_r,
     Key.alt_l,
